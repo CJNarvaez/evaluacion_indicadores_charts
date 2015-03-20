@@ -1,0 +1,52 @@
+body
+{
+background-repeat: no-repeat;
+background-position: 0px 50px;
+} 
+
+#captura {
+    display: none;
+}
+
+    h1,h2,h3,h4,h5,h6
+    {
+        color: #004000;
+        font-family: sans-serif;
+        font-weight: bolder;
+        line-height: 5px;
+        color: maroon;
+        text-align: center;
+    }
+.boton {
+	   font-size: 10px;
+	}
+    .centrado {
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border: 1px solid silver;
+        border-width: thin;
+    }
+    .rojo {
+        background: maroon;    
+    }
+    #contenido {
+        position: absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        margin: auto;
+        background: #83C24A;
+        width: 607px;
+        height: 190px;
+    }
+    h1,h2,h3,h4,h5,h6
+    {
+        color: #004000;
+        font-family: sans-serif;
+        font-weight: bolder;
+        line-height: 5px;
+        color: maroon;
+        text-align: center;
+    }
