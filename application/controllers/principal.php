@@ -495,28 +495,14 @@ class Principal extends CI_Controller
             
             //LLENA UN ARREGLO CON TODOS LOS PROGRAMAS Y SUS DATOS
             foreach ( $datos['juris'] as $ren )
-            {
-                //print_r($ren);
                 $datos['ind'][] = $this->md_indicador->eval_indicador($ren['id'],"programa",'juris');
-            }
             
             foreach ( $datos['1er'] as $ren )
-            {
-                //print_r($ren);
                 $datos['ind_1er'][] = $this->md_indicador->eval_indicador($ren['id'],"programa",'1er');
-            }
             
             foreach ( $datos['2do'] as $ren )
-            {
-                //print_r($ren);
                 $datos['ind_2do'][] = $this->md_indicador->eval_indicador($ren['id'],"programa",'2do');
-            }
-            //print_r($datos);
-            //$datos['ind'] = $ind;
-            // echo $this->session->userdata('username');
-            //$mnu['selec'] = 'captura';
-            //$this->load->view('vw_encabezado');
-            //$this->load->view('vw_menu',$mnu);
+
             $this->load->model('Md_pagina');
             $datos['pagina'] = new Md_Pagina;
             $this->load->view("vw_principal",$datos);
