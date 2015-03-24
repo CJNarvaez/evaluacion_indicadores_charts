@@ -297,69 +297,6 @@ class Principal extends CI_Controller
         
         return $res;
     }
-    function prueba()
-    {
-        $this->load->helper('open-flash-chart'); // load helper function
-        //$this->load->library('ofc'); //load Open Flash Chart
-        
-        $this->load->library('ofc');
-
-        $title = $this->ofc->title( date("D M d Y") );
-        
-        $bar = $this->ofc->bar();
-        
-        $bar_values = array(1,2,3,4,5,6,7);
-        
-        $bar->set_values($bar_values);
-        
-        $tags = $this->ofc->ofc_tags();
-        $tags->font("Verdana", 10)
-            ->colour("#000000")
-            ->align_x_center()
-            ->text('#y#');        
-        
-        $x=0;
-        foreach($bar_values as $v)
-        {
-            $tags->append_tag($this->ofc->ofc_tag($x, $v));
-            $x++;
-        }
-        
-        
-        $x = $this->ofc->x_axis();
-        $x->set_labels_from_array(array('Mon','Tue','Wed','Thur','Fri','Sat','Sun'));                 
-                
-        $this->ofc->open_flash_chart();
-        $this->ofc->set_title( $title );
-        $this->ofc->add_element( $bar );
-        $this->ofc->add_element( $tags );
-        $this->ofc->set_x_axis( $x );
-                
-        echo $this->ofc->toPrettyString();
-
-    }
-    function reporte_ofc()
-    {
-        $this->load->helper('open-flash-chart');
-        
-        //open_flash_chart_object_str( 700, 350, site_url('principal/prueba'), $use_swfobject=true, $base=base_url() );
-        
-        //$data['content'] = open_flash_chart_object_str('700','350',site_url('principal/prueba'),false,base_url());
-
-        $data['url'] = "principal/prueba";
-        $data['width'] = 700;
-        $data['height'] = 350;
-        $data['useswfobject'] = false;
-        
-        $this->load->view('vw_encabezado', $data);
-        $this->load->view('prueba',$data); 
-
-//$width of graph (ie. '700')
-//$height of graph (ie. '350')
-//$url to json string (ie site_url('charts/item_track') )
-//$use_swfobject (ie true/false) I have swfobject already loaded so I have it set to false
-//$base (ie base_url() ) 
-    }
     function reporte()
     {
         $this->load->library('ion_auth');
@@ -1631,22 +1568,6 @@ class Principal extends CI_Controller
             force_download($name, $data);
         }
     }
-    function prueba_mi_libreria()
-    {
-        //$params = array('mes' => '03', 'abreviado' => 1);
-        $this->load->library('Mi_libreria');
-        //$mes = $this->mi_libreria->mes_a_txt('02',1);
-        $mes = New Mi_libreria();
-        //echo $mes->mes_texto;
-        //print_r($mes);
-        echo "EL MES 05 EN TEXTO: " . $this->mi_libreria->mes_a_txt('05');
-        echo "<br />";
-        echo "EL MES 05 EN TEXTO ABREVIADO: " . $this->mi_libreria->mes_a_txt('05',1);
-        echo "<br />";
-        echo "EL MES MAYO EN NUM: " . $this->mi_libreria->mes_a_num('MAYO');
-        echo "<br />";
-        echo "EL MES MAY EN NUM ABREVIADO: " . $this->mi_libreria->mes_a_num('MAY',1);
-    }
     function ind_hosp($id_um,$mes,$anio)
     {
         //$this->output->enable_profiler();
@@ -2278,9 +2199,7 @@ class Principal extends CI_Controller
         $this->load->view('prueba2',$data); 
     }
     function graficar_ind_hosp_xum($id_um,$servicio,$anio,$indicador,$titulo,$servicio2)
-    {
-        //$this->load->helper('open-flash-chart');
-        
+    {        
         $data['url'] = "principal/datos_ind_hosp_xum/".$id_um.'/'.$servicio.'/'.$anio.'/'.$indicador;
         $data['width'] = 700;
         $data['height'] = 350;
@@ -2300,17 +2219,9 @@ class Principal extends CI_Controller
         $this->load->view('prueba3',$data);  
     }
     function datos_ind_hosp_xum($id_um,$servicio,$anio,$indicador)
-    {
-        $this->load->helper('open-flash-chart'); // load helper function
-        
-        $this->load->library('ofc');
-        
+    {        
         $this->load->model('md_unidad_medica');
         $um = new Md_unidad_medica($id_um);
-        
-        $this->load->library('Mi_libreria');
-        
-        $bar = $this->ofc->bar();
         
         $meses = array('01','02','03','04','05','06','07','08','09','10','11','12');
         
@@ -2328,7 +2239,7 @@ class Principal extends CI_Controller
         {
             if($indicador == 'ocup_men')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' % OCUPACION MENSUAL' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['porc_ocup_men'];
                 elseif($servicio == 'med_int')
@@ -2344,7 +2255,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'ocup_acu')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' % OCUPACION ACUMULADO' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['porc_ocup_acu'];
                 elseif($servicio == 'med_int')
@@ -2360,7 +2271,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'ind_rot_men')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' INDICE DE ROTACION MENSUAL' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['ind_rot_men'];
                 elseif($servicio == 'med_int')
@@ -2376,7 +2287,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'ind_rot_acu')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' INDICE DE ROTACION ACUMULADO' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['ind_rot_acu'];
                 elseif($servicio == 'med_int')
@@ -2392,7 +2303,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'int_sust_men')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' INTERVALO DE SUSTITUCION MENSUAL' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['int_sust_men'];
                 elseif($servicio == 'med_int')
@@ -2408,7 +2319,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'int_sust_acu')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' INTERVALO DE SUSTITUCION ACUMULADO' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['int_sust_acu'];
                 elseif($servicio == 'med_int')
@@ -2424,7 +2335,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'tasa_mort_bruta')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' TASA DE MORTALIDAD BRUTA' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['tasa_mort_bruta'];
                 elseif($servicio == 'med_int')
@@ -2440,7 +2351,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'tasa_mort_ajus')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' TASA DE MORTALIDAD AJUSTADA' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['tasa_mort_ajus'];
                 elseif($servicio == 'med_int')
@@ -2456,7 +2367,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'dias_est_men')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' DIAS ESTANCIA MENSUAL' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['dias_est_men'];
                 elseif($servicio == 'med_int')
@@ -2472,7 +2383,7 @@ class Principal extends CI_Controller
             }
             elseif($indicador == 'dias_est_acu')
             {
-                $title = $this->ofc->title( $um->nombre.' '.$anio.' DIAS ESTANCIA ACUMULADO' );
+                
                 if($servicio == 'cir')
                     $bar_values[] = $dato['dias_est_acu'];
                 elseif($servicio == 'med_int')
@@ -2490,539 +2401,7 @@ class Principal extends CI_Controller
         
         return $bar_values;
         
-        $title->set_style( "{font-size: 20px; font-family: Times New Roman; font-weight: bold; color: #000; text-align: center;}" );
-        
-        $leyenda_x = array('ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC');
-        
-        $bar->set_values($bar_values);
-        
-        $tags = $this->ofc->ofc_tags();
-        $tags->font("Verdana", 10)
-            ->colour("#000000")
-            ->align_x_center()
-            ->text('#y#');
-        
-        $x=0;
-        foreach($bar_values as $v)
-        {
-            $tags->append_tag($this->ofc->ofc_tag($x, $v));
-            $x++;
-        }
-        
-        
-        $x = $this->ofc->x_axis();
-        $x->set_labels_from_array($leyenda_x);
-        
-        $y = $this->ofc->y_axis();
-        $max = 100;
-        $y->set_range(0,$max + 1,25);
-        $this->ofc->set_y_axis( $y );
-                
-        $this->ofc->open_flash_chart();
-        $this->ofc->set_title( $title );
-        $this->ofc->add_element( $bar );
-        $this->ofc->add_element( $tags );
-        $this->ofc->set_x_axis( $x );
-                
-        echo $this->ofc->toPrettyString();
-    }
-    function datos_ind_hosp($id_um,$mes,$anio,$indicador)
-    {
-        $this->load->helper('open-flash-chart'); // load helper function
-        //$this->load->library('ofc'); //load Open Flash Chart
-        
-        $this->load->library('ofc');
-        
-        $this->load->model('md_unidad_medica');
-        $um = new Md_unidad_medica($id_um);
-        
-        $this->load->library('Mi_libreria');
-        $mes_txt = $this->mi_libreria->mes_a_txt($mes,1);
-        
-        $bar = $this->ofc->bar_3d();
-        $bar->set_colour( '#900000' );
-        $bar->set_alpha(0.9);
-        
-        $animacion = new bar_on_show('grow-up',0.5,0.5);
-        
-        $bar->set_on_show($animacion);
-        
-        $datos = $this->ind_hosp($id_um,$mes,$anio);
-        //print_r($datos);
-        
-        //45
-        
-        $this->load->helper('text');
-        
-        $um->nombre = word_limiter($um->nombre,3,'');
-        
-        if($indicador == 'mensual')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' % OCUP. MENSUAL' );
-            $bar_values = array($datos['porc_ocup_men'],$datos['med_int_porc_ocup_men'],$datos['pediatria_porc_ocup_men'],$datos['ginecologia_porc_ocup_men'],$datos['trauma_porc_ocup_men'],$datos['total_porc_ocup_men']);
-        }
-        elseif($indicador == 'acumulado')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' % OCUP. ACUMULADO' );
-            $bar_values = array($datos['porc_ocup_acu'],$datos['med_int_porc_ocup_acu'],$datos['pediatria_porc_ocup_acu'],$datos['ginecologia_porc_ocup_acu'],$datos['trauma_porc_ocup_acu'],$datos['total_porc_ocup_acu']);
-        }
-        elseif($indicador == 'ind_rot_men')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' IND. ROT. MENSUAL' );
-            $bar_values = array($datos['ind_rot_men'],$datos['med_int_ind_rot_men'],$datos['pediatria_ind_rot_men'],$datos['ginecologia_ind_rot_men'],$datos['trauma_ind_rot_men'],$datos['total_ind_rot_men']);
-        }
-        elseif($indicador == 'ind_rot_acu')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' IND. DE ROT. ACUMULADO' );
-            $bar_values = array($datos['ind_rot_acu'],$datos['med_int_ind_rot_acu'],$datos['pediatria_ind_rot_acu'],$datos['ginecologia_ind_rot_acu'],$datos['trauma_ind_rot_acu'],$datos['total_ind_rot_acu']);
-        }
-        elseif($indicador == 'int_sust_men')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' INT. SUST. MENSUAL' );
-            $bar_values = array($datos['int_sust_men'],$datos['med_int_int_sust_men'],$datos['pediatria_int_sust_men'],$datos['ginecologia_int_sust_men'],$datos['trauma_int_sust_men'],$datos['total_int_sust_men']);
-        }
-        elseif($indicador == 'int_sust_acu')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' INT. SUST. ACUMULADO' );
-            $bar_values = array($datos['int_sust_acu'],$datos['med_int_int_sust_acu'],$datos['pediatria_int_sust_acu'],$datos['ginecologia_int_sust_acu'],$datos['trauma_int_sust_acu'],$datos['total_int_sust_acu']);
-        }
-        elseif($indicador == 'tasa_mort_bruta')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' TASA MORT. BRUTA' );
-            $bar_values = array($datos['tasa_mort_bruta'],$datos['med_int_tasa_mort_bruta'],$datos['pediatria_tasa_mort_bruta'],$datos['ginecologia_tasa_mort_bruta'],$datos['trauma_tasa_mort_bruta'],$datos['total_tasa_mort_bruta']);
-        }
-        elseif($indicador == 'tasa_mort_ajus')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' TASA MORT. AJUSTADA' );
-            $bar_values = array($datos['tasa_mort_ajus'],$datos['med_int_tasa_mort_ajus'],$datos['pediatria_tasa_mort_ajus'],$datos['ginecologia_tasa_mort_ajus'],$datos['trauma_tasa_mort_ajus'],$datos['total_tasa_mort_ajus']);
-        }
-        elseif($indicador == 'dias_est_men')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' DIAS EST. MENSUAL' );
-            $bar_values = array($datos['dias_est_men'],$datos['med_int_dias_est_men'],$datos['pediatria_dias_est_men'],$datos['ginecologia_dias_est_men'],$datos['trauma_dias_est_men'],$datos['total_dias_est_men']);
-        }
-        elseif($indicador == 'dias_est_acu')
-        {
-            $title = $this->ofc->title( $um->nombre.' '.$mes_txt.' '.$anio.' DIAS EST. ACUMULADO' );
-            $bar_values = array($datos['dias_est_acu'],$datos['med_int_dias_est_acu'],$datos['pediatria_dias_est_acu'],$datos['ginecologia_dias_est_acu'],$datos['trauma_dias_est_acu'],$datos['total_dias_est_acu']);
-        }
-        
-        $title->set_style( "{font-size: 20px; font-family: Arial; font-weight: bold; color: #004000; text-align: center;}" );
-        
-        $leyenda_x = array('CIRUGIA','MED INTERNA','PEDIATRIA','GINECOLOGIA','TRAUMA','TOTAL');
-        
-        $bar->set_values($bar_values);
-        
-        $tags = $this->ofc->ofc_tags();
-        $tags->font("Verdana", 10)
-            ->colour("#000000")
-            ->align_x_center()
-            ->text('#y#');
-        
-        $x=0;
-        
-        if($indicador == 'mensual' || $indicador == 'acumulado')
-        {
-            $max = 100;
-            $steps = 25;
-        }
-        else
-        {
-            $max = 20;
-            $steps = 5;
-        }
-        
-        foreach($bar_values as $v)
-        {
-            $tags->append_tag($this->ofc->ofc_tag($x, $v));
-            $x++;
-            if($v > $max)
-                $max = $v;
-        }
-        
-        
-        $x = $this->ofc->x_axis();
-        $x->set_labels_from_array($leyenda_x);
-        
-        $x->set_3d( 5 );
-        $x->colour = '#909090';
-        
-        $y = $this->ofc->y_axis();
-        
-        
-        $t = new tooltip();
-        $t->set_hover(5000);
-        
-        $this->ofc->set_tooltip($t);
-        
-        $y->set_range(0,$max + 10,$steps);
-        $this->ofc->set_y_axis( $y );
-                
-        $this->ofc->open_flash_chart();
-        $this->ofc->set_title( $title );
-        $this->ofc->add_element( $bar );
-        $this->ofc->add_element( $tags );
-        $this->ofc->set_x_axis( $x );
-                
-        echo $this->ofc->toPrettyString();
-    }
-    
-    function datos_metadatos($mes,$anio,$indicador,$reporte = 'juris')
-    {
-        $this->load->helper('open-flash-chart');
-        $this->load->model('md_indicador');
-        $this->load->library('ofc');
-        
-        $this->load->library('Mi_libreria');
-        $mes_txt = $this->mi_libreria->mes_a_txt($mes,1);
-        
-        $bar = $this->ofc->bar_3d();
-        $bar->set_colour( '#900000' );
-        $bar->set_alpha(0.9);
-        
-        $bar2 = $this->ofc->line();
-        $bar2->set_colour( '#009000' );
-        //$bar2->set_alpha(0.9);
-        
-        $animacion = new bar_on_show('grow-up',0.5,0.5);
-        
-        $bar->set_on_show($animacion);
-        
-        //$reporte = 'juris';                
-        if($reporte == 'juris')
-            $uni_med = $this->md_indicador->uni_med_calc($indicador);
-        if($reporte == 'hc')
-            $uni_med = $this->md_indicador->uni_med_calc_hc($indicador);
-        if($reporte == '2n')
-            $uni_med = $this->md_indicador->uni_med_calc_2n($indicador);
-        
-        //print_r($uni_med);
-        
-        //GUARDA LAS METAS, NOMBRES DE VARIABLES PARA EL CALCULO, ETC.
-        foreach($uni_med as $ren)
-        {
-            if($reporte == '2n')
-                $indicador = 0;
-            else
-                $indicador = $ren['indicador'];
-                
-            $descripcion = $ren['descripcion'];
-            $h = $ren['h'];
-            $programa = $ren['programa'];
-            $var = explode('+',$ren['calculo']);
-            
-            //print_r($ren);
-            if($reporte == 'juris')
-            {
-                $j1 = $ren['J1'];
-                $j2 = $ren['J2'];
-                $j3 = $ren['J3'];
-                $j4 = $ren['J4'];
-                $j5 = $ren['J5'];
-                $j6 = $ren['J6'];
-                $j7 = $ren['J7'];
-            }
-            if($reporte == 'hc')
-            {
-                $calera = $ren['calera'];
-                $trancoso = $ren['trancoso'];
-                $ojocaliente = $ren['ojocaliente'];
-                $sombrerete = $ren['sombrerete'];
-                $valparaiso = $ren['valparaiso'];
-                $juan_aldama = $ren['juan_aldama'];
-                $jalpa = $ren['jalpa'];
-                $juchipila = $ren['juchipila'];
-                $tabasco = $ren['tabasco'];
-                $nochistlan = $ren['nochistlan'];
-                $villa_de_cos = $ren['villa_de_cos'];
-            }
-            $acumular = $ren['acumular'];
-        }
-        
-        if($reporte == 'juris'){
-            $jur = array('01','02','03','04','05','06','07');
-            $datos['categorias'] = array('ZACATECAS','OJOCALIENTE','FRESNILLO','RIO GRANDE','JALPA','TLALTENANGO','CONCHA DEL ORO');
-        }
-        elseif($reporte == 'hc')
-        {
-            $jur = array('ZSSSA000572','ZSSSA000695','ZSSSA000700','ZSSSA000922','ZSSSA001016','ZSSSA001313','ZSSSA001395','ZSSSA001506','ZSSSA001861','ZSSSA002136','ZSSSA002141');
-            $datos['categorias'] = array("JALPA","JUAN ALDAMA","JUCHIPILA","NOCHISTLAN","OJOCALIENTE","SOMBRERETE","TABASCO","VALPARAISO","TRANCOSO","VICTOR ROSALES","VILLA DE COS");
-        }
-        elseif($reporte == '2n'){
-            
-            $this->db->where_in('tipologia',array('H.C.','H.G.','H.E.'));
-            $this->db->where('clues <>',"ZSSSA013172");
-            $consulta = $this->db->get('um');
-            
-            $jur = array();
-            
-            foreach($consulta->result_array() as $row)
-            {
-                $jur[] = $row['clues'];
-                $datos['categorias'][] = $row['alias'];
-            }
-            //print_r($datos['categorias']);
-            
-        }       
-        
-        foreach($jur as $juris){
-            if(isset($var))
-        //CONSULTA LOS VALORES DE LA VARIABLE UNO POR UNO PARA SUMARLOS DESPUES
-            foreach ($var as $ren){
-               // print_r($ren);
-               // echo br();
-               $cadena = substr($ren,0,4);
-               //print_r($cadena);
-               //echo br();
-                if($cadena != "RESP")
-                {
-                    if($reporte == 'juris')
-                        $sumar[$ren] = $this->md_indicador->valor_ind($ren,$mes,$anio,$juris,'todas',$acumular);
-                    elseif($reporte == 'hc')
-                        $sumar[$ren] = $this->md_indicador->valor_ind_hc($ren,$mes,$anio,$juris,'H.C.',$acumular);
-                    elseif($reporte == '2n'){
-                        if($cadena != "SAEH")
-                            $sumar[$ren] = $this->md_indicador->valor_ind_2n($ren,$mes,$anio,$juris,array('H.C.','H.E.','H.G.'),$acumular);
-                        else
-                            $sumar[$ren] = $this->md_indicador->valor_ind_2n_saeh($ren,$mes,$anio,$juris,array('H.C.','H.E.','H.G.'),$acumular);
-                        
-                    }
-                }
-                else
-                {
-                    if($reporte == 'juris')
-                        $sumar[$ren] = $this->md_indicador->valor_ind_jur($ren,$mes,$anio,$juris);
-                }
-              // print_r($sumar[$ren]);
-              //echo $juris."<br />";
-            }
-            $total = 0;
-            //print_r($total);
-            
-            if(isset($sumar))
-            //SUMA LOS VALORES PARA LLEGAR AL CALCULO FINAL
-            foreach($sumar as $ren)
-               foreach($ren as $row)
-               {
-                   // print_r($row['nombre']);
-                    //echo "<br />";
-                $total = $total + $row['logro'];
-                }
-            else $total = 0;
-            
-            $datos['logro'][] = $total;
-        }
-       
-        //$datos = $this->ind_hosp($id_um,$mes,$anio);
-        //print_r($datos);
-
-        $this->load->helper('text');
-              
-        //$title = $this->ofc->title( $descripcion );
-        //$bar_values = array($datos[0],$datos[1],$datos[2],$datos[3],$datos[4],$datos[5],$datos[6]);
-        //print_r($uni_med[0]);
-        
-        if(isset($uni_med[0]))
-        {
-            if($reporte == 'juris')
-            {
-                $j1 = (int)$uni_med[0]['J1'];
-                $j2 = (int)$uni_med[0]['J2'];
-                $j3 = (int)$uni_med[0]['J3'];
-                $j4 = (int)$uni_med[0]['J4'];
-                $j5 = (int)$uni_med[0]['J5'];
-                $j6 = (int)$uni_med[0]['J6'];
-                $j7 = (int)$uni_med[0]['J7'];
-            }
-            elseif($reporte == 'hc')
-            {
-                $calera = (int)$uni_med[0]['calera'];
-                $trancoso = (int)$uni_med[0]['trancoso'];
-                $ojocaliente = (int)$uni_med[0]['ojocaliente'];
-                $sombrerete = (int)$uni_med[0]['sombrerete'];
-                $valparaiso = (int)$uni_med[0]['valparaiso'];
-                $juan_aldama = (int)$uni_med[0]['juan_aldama'];
-                $jalpa = (int)$uni_med[0]['jalpa'];
-                $juchipila = (int)$uni_med[0]['juchipila'];
-                $tabasco = (int)$uni_med[0]['tabasco'];
-                $nochistlan = (int)$uni_med[0]['nochistlan'];
-                $villa_de_cos = (int)$uni_med[0]['villa_de_cos'];
-            }
-            elseif($reporte == '2n')
-            {
-                $zacatecas = (int)$uni_med[0]['zacatecas'];
-                $fresnillo = (int)$uni_med[0]['fresnillo'];
-                $jerez = (int)$uni_med[0]['jerez'];
-                $loreto = (int)$uni_med[0]['loreto'];
-                $mujer = (int)$uni_med[0]['mujer'];
-                $psiquiatrico = (int)$uni_med[0]['psiquiatrico'];
-                $calera = (int)$uni_med[0]['calera'];
-                $trancoso = (int)$uni_med[0]['trancoso'];
-                $ojocaliente = (int)$uni_med[0]['ojocaliente'];
-                $sombrerete = (int)$uni_med[0]['sombrerete'];
-                $valparaiso = (int)$uni_med[0]['valparaiso'];
-                $juan_aldama = (int)$uni_med[0]['juan_aldama'];
-                $jalpa = (int)$uni_med[0]['jalpa'];
-                $juchipila = (int)$uni_med[0]['juchipila'];
-                $tabasco = (int)$uni_med[0]['tabasco'];
-                $nochistlan = (int)$uni_med[0]['nochistlan'];
-                $villa_de_cos = (int)$uni_med[0]['villa_de_cos'];
-            }
-        }
-        else
-        {
-            if($reporte == 'juris')
-            {
-                $j1 = 0;
-                $j2 = 0;
-                $j3 = 0;
-                $j4 = 0;
-                $j5 = 0;
-                $j6 = 0;
-                $j7 = 0;
-            }
-            elseif($reporte == 'hc')
-            {
-                $calera = 0;
-                $trancoso = 0;
-                $ojocaliente = 0;
-                $sombrerete = 0;
-                $valparaiso = 0;
-                $juan_aldama = 0;
-                $jalpa = 0;
-                $juchipila = 0;
-                $tabasco = 0;
-                $nochistlan = 0;
-                $villa_de_cos = 0;
-            }
-            elseif($reporte == '2n')
-            {
-                $calera = 0;
-                $trancoso = 0;
-                $ojocaliente = 0;
-                $sombrerete = 0;
-                $valparaiso = 0;
-                $juan_aldama = 0;
-                $jalpa = 0;
-                $juchipila = 0;
-                $tabasco = 0;
-                $nochistlan = 0;
-                $villa_de_cos = 0;
-            }
-            elseif($reporte == '2n')
-            {
-                $zacatecas = 0;
-                $fresnillo = 0;
-                $jerez = 0;
-                $loreto = 0;
-                $mujer = 0;
-                $psiquiatrico = 0;
-                $calera = 0;
-                $trancoso = 0;
-                $ojocaliente = 0;
-                $sombrerete = 0;
-                $valparaiso = 0;
-                $juan_aldama = 0;
-                $jalpa = 0;
-                $juchipila = 0;
-                $tabasco = 0;
-                $nochistlan = 0;
-                $villa_de_cos = 0;
-            }            
-        }
-        
-        if(isset($acumular))
-            if($acumular == "NO")
-            {
-                if($reporte == 'juris')
-                    $bar2_values = array($j1,$j2,$j3,$j4,$j5,$j6,$j7);
-                elseif($reporte == 'hc')
-                    $bar2_values = array($jalpa,$juan_aldama,$juchipila,$nochistlan,$ojocaliente,$sombrerete,$tabasco,$valparaiso, $trancoso,$calera,$villa_de_cos);
-                elseif($reporte == '2n')
-                    $bar2_values = array($fresnillo,$jalpa,$jerez,$juan_aldama,$juchipila,$nochistlan,$ojocaliente,$sombrerete,$tabasco,$valparaiso, $trancoso,$calera,$villa_de_cos,$mujer,$psiquiatrico,$loreto,$zacatecas);
-            }
-            else
-            {
-                if($reporte == 'juris')
-                    $bar2_values = array($j1 / 12,$j2 / 12,$j3 / 12,$j4 / 12,$j5 / 12,$j6 / 12,$j7 / 12);
-                elseif($reporte == 'hc')
-                    $bar2_values = array($jalpa / 12,$juan_aldama / 12,$juchipila / 12,$nochistlan / 12,$ojocaliente / 12,$sombrerete / 12,$tabasco / 12,$valparaiso / 12, $trancoso / 12,$calera / 12,$villa_de_cos / 12);
-                elseif($reporte == '2n')
-                    $bar2_values = array($fresnillo / 12,$jalpa / 12,$jerez / 12,$juan_aldama / 12,$juchipila / 12,$nochistlan / 12,$ojocaliente / 12,$sombrerete / 12,$tabasco / 12,$valparaiso / 12, $trancoso / 12,$calera / 12,$villa_de_cos / 12,$mujer / 12,$psiquiatrico / 12,$loreto / 12,$zacatecas / 12);
-                //print_r($bar2_values);
-            }
-        else
-            $bar2_values = array(0,0,0,0,0,0,0);
-            
-        if(isset($descripcion))
-            $datos['titulo'] = $descripcion;
-        $datos['meta'] = $bar2_values;
-        
-         return $datos;
-        
-        $max = 0;
-        
-        foreach($uni_med[0] as $ren)
-            if($max < (int) $ren)
-                $max = (int)$ren /12;
-        
-                
-        $title->set_style( "{font-size: 20px; font-family: Arial; font-weight: bold; color: #004000; text-align: center;}" );
-        
-        $leyenda_x = $jur;
-        
-        $bar->set_values($bar_values);
-        $bar2->set_values($bar2_values);
-        
-        $tags = $this->ofc->ofc_tags();
-        $tags->font("Verdana", 10)
-            ->colour("#000000")
-            ->align_x_center()
-            ->text('#y#');
-        
-        $x=0;
-        
-        
-            $steps = 100;
-        
-        foreach($bar_values as $v)
-        {
-            $tags->append_tag($this->ofc->ofc_tag($x, $v));
-            $x++;
-            if($v > $max)
-                $max = $v;
-        }
-        
-        
-        $x = $this->ofc->x_axis();
-        $x->set_labels_from_array($leyenda_x);
-        
-        $x->set_3d( 5 );
-        $x->colour = '#909090';
-        
-        $y = $this->ofc->y_axis();
-        
-        
-        $t = new tooltip();
-        $t->set_hover(5000);
-        
-        $this->ofc->set_tooltip($t);
-        
-        if($max > 5000)
-        $steps = 1000;
-        
-        $y->set_range(0,$max + 100,$steps);
-        $this->ofc->set_y_axis( $y );
-                
-        $this->ofc->open_flash_chart();
-        $this->ofc->set_title( $title );
-        $this->ofc->add_element( $bar );
-        $this->ofc->add_element($bar2);
-        $this->ofc->add_element( $tags );
-        $this->ofc->set_x_axis( $x );
-                
-        echo $this->ofc->toPrettyString(); 
-    }    
+    }        
     function prueba_46ind($um,$mes,$anio)
     {
         
@@ -3054,14 +2433,6 @@ class Principal extends CI_Controller
         $indicador = new Md_indicador_1er(11);
         //print_r($indicador);
         $indicador->reportar_mes($mes,$anio,$um);
-    }
-    function prueba_pagina()
-    {
-        $this->load->model('md_pagina');
-        $pagina = new Md_Pagina();
-        $pagina->encabezado_fondo = base_url('img/portada2-2.jpg');
-        $datos['pagina'] = $pagina;
-        $this->load->view('vw_prueba_obj_pagina',$datos);
     }
 }
 
