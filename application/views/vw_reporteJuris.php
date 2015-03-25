@@ -41,7 +41,7 @@
             <center>
             <table>
                 <tr><td><div class="azul"></div></td><td>Mayor de 120%</td></tr>
-                <tr><td><div class="verde"></div></td><td>80 - 119.99%</td></tr>
+                <tr><td><div class="verde"></div></td><td>80 - 120%</td></tr>
                 <tr><td><div class="amarillo"></div></td><td>60 - 79.99 %</td></tr>
                 <tr><td><div class="rojo"></div></td><td>0 - 59.99 %</td></tr>
             </table></center>
