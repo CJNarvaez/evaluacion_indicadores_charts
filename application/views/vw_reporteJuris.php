@@ -34,21 +34,23 @@
         <?php echo $titulo ?>
         <?php 
             echo $reporteJuris;
-            echo $botonPdf;
-
-           /* if($reporte == 'juris'){
-                if($agregarHC)
-                    echo '<center><a class="btn btn-success" href="'.site_url('principal/reporte_juris_hc_pdf/'.$mes.'/'.$anio.'/'.$juris.'/'.$reporte).'" target="_blank"><span class="glyphicon glyphicon-cloud-download"></span> VERSION PDF</a></center>';
-                else
-                    echo '<center><a class="btn btn-success" href="'.site_url('evaluacion/reporte_juris_pdf/'.$mes.'/'.$anio.'/'.$juris.'/'.$reporte).'" target="_blank"><span class="glyphicon glyphicon-cloud-download"></span> VERSION PDF</a></center>';
-            }
-            else
-                if($reporte == 'hc')
-                    echo '<center><a class="btn btn-success" href="'.site_url('principal/reporte_hc_pdf/'.$mes.'/'.$anio.'/'.$hc.'/'.$reporte).'" target="_blank"><span class="glyphicon glyphicon-cloud-download"></span> VERSION PDF</a></center>';
-                else
-                    echo '<center><a class="btn btn-success" href="'.site_url('principal/reporte_2n_pdf/'.$mes.'/'.$anio.'/'.$hc.'/'.$reporte).'" target="_blank"><span class="glyphicon glyphicon-cloud-download"></span> VERSION PDF</a></center>';
-            */
+        ?>
+        <div class="container">
+            <div class="col-xs-offset-4 col-xs-4 alert alert-info text-center">
+            <strong>Rangos de Semaforización</strong>
+            <center>
+            <table>
+                <tr><td><div class="azul"></div></td><td>Mayor de 120%</td></tr>
+                <tr><td><div class="verde"></div></td><td>80 - 119.99%</td></tr>
+                <tr><td><div class="amarillo"></div></td><td>60 - 79.99 %</td></tr>
+                <tr><td><div class="rojo"></div></td><td>0 - 59.99 %</td></tr>
+            </table></center>
+            </div>
+        </div>
+        <?php
+            echo $botonPdf;            
             echo heading('FECHA DE CORTE DE LA INFORMACION '.$corte.' '.$anio,5,'class="text-center"');
         ?>
+        
     </body>
 </html>
