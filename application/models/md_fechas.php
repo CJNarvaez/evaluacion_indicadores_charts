@@ -10,6 +10,9 @@
  */
 class Md_fechas extends CI_Model
 {
+    function __construct(){
+        parent::__construct();
+    }
     
     /**
      * CONVIERTE UN MES NUMERICO A TEXTO
