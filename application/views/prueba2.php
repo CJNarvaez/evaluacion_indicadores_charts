@@ -617,7 +617,7 @@ function datos (){
                 type: 'column'
             },
             title: {
-                text: 'Porcentaje de Ocupacion Mensual'
+                text: '<?php echo $titulo ?>'
             },
             subtitle: {
                 text: 'Todos los Servicios <?php echo $anio ?>'
