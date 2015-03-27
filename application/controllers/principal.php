@@ -259,44 +259,6 @@ class Principal extends CI_Controller
         }
         
     }
- /*   function meta_parcial($meta,$total,$mes,$acumular)
-    {
-        if($acumular != 'NO')
-        {       
-            $meta_parcial = $meta / 12;
-            $meta_parcial = $meta_parcial * $mes;
-        }
-        else  
-            $meta_parcial = $meta;                        
-                                
-        if($meta_parcial != 0)
-            $porcentaje_logro_parcial = ($total * 100) / $meta_parcial;
-        else
-            $porcentaje_logro_parcial = 0;
-        
-        if($porcentaje_logro_parcial >= 120)
-            $semaforo_parcial = '<div class="azul"></div>';
-        else            
-            if($porcentaje_logro_parcial >= 80)
-                $semaforo_parcial = '<div class="verde"></div>';
-            else
-                if( $porcentaje_logro_parcial >= 60)
-                    $semaforo_parcial = '<div class="amarillo"></div>';
-                else
-                    if($porcentaje_logro_parcial < 60)
-                        $semaforo_parcial = '<div class="rojo"></div>';
-        
-        if($meta == 0)
-            $semaforo_parcial = '<div class="blanco"></div>';
-        
-        $res['meta_parcial'] = $meta_parcial;
-        $res['porcentaje_logro_parcial'] = $porcentaje_logro_parcial;
-        $res['semaforo_parcial'] = $semaforo_parcial;        
-        $res['celda'] = array('data' => $semaforo_parcial,
-                        'align' => 'center');                                                
-        
-        return $res;
-    }*/
     function reporte()
     {
         $this->load->library('ion_auth');
