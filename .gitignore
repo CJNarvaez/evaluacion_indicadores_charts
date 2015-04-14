@@ -51,3 +51,5 @@ Temporary Items
 *.rar
 *.myd
 *.mmap
+*.sublime-project
+*.sublime-workspace
