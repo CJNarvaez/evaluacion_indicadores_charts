@@ -147,7 +147,7 @@ Class Md_indicador_hospitalario extends CI_Model
             }
             else{
                 //PRUEBA PARA CONSULTAR LOS RESPONSABLES DE PROGRAMA 18/09/2014
-                if($reporte == "juris")
+                if($reporte == "juris" OR $reporte == 'jurishc')
                     $sumar[$ren] = $indicador->valor_ind_jur($ren,$mes,$anio,$hc);
                 elseif($reporte == 'hc')
                 {

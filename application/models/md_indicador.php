@@ -80,7 +80,9 @@ class MD_indicador extends CI_Model
     function valor_ind($nombre,$mes,$anio,$juris,$nivel,$acumular,$dividir,$qhc = 0)
     {
        // $this->output->enable_profiler();
-        //print_r($nombre);
+       // print_r($nivel);
+       // echo br();
+       // print_r($juris);
         //echo br();
         
         $this->db->where('nombre',$nombre);
@@ -101,18 +103,21 @@ class MD_indicador extends CI_Model
                 $this->db->where('mes',(integer) $mes);
             $this->db->where('anio',$anio);
             if($nivel == 'soloJuris')
-                $this->db->where_not_in('tipologia',array('H.C.','H.E.','H.G.'));
+            {
+                if($qhc == 1)
+                    $this->db->where_not_in('tipologia',array('H.C.','H.E.','H.G.'));
+            }
             elseif($nivel != 'todas')
                     $this->db->where('tipologia',$nivel);
                 else
-                    $this->db->where_not_in('tipologia',array('H.G.'));
+                    $this->db->where_not_in('tipologia',array('H.G.','H.E.'));
                 
             if($juris != "todas")
                 $this->db->where("cve_jur",$juris);
-            if($qhc == 1){
+           /* if($qhc == 1){
                 $hospitales = array('H.C.', 'H.G.', 'H.E.');
                 $this->db->where_not_in("tipologia",$hospitales);
-            }
+            }*/
            // $this->db->where_in('id_unidad',$juris);
            if($this->publicar)
                 $valor = $this->db->get('vw_evaluacion_juris');
@@ -406,7 +411,17 @@ class MD_indicador extends CI_Model
     function valor_ind_hc_resp($nombre,$mes,$anio,$juris)
     {
         //$this->output->enable_profiler();
+        //echo strlen($juris)."<br />";
         //print_r($nombre);
+        
+        //
+        //PARCHE PARA QUE FUNCIONE LOS RESPONSABLES EN REPORTE 1ER NIVEL//
+        if(strlen($juris) > 3 && $juris != 'todas')
+        {
+            $this->load->model("md_unidad_medica");
+            $juris = $this->md_unidad_medica->cluesID($juris);
+        }
+        //////////////////////////////////////////////////////////////////
         
         $this->db->like('calculo',$nombre);
         $acc = $this->db->get('eval_unidad_medida_1er');

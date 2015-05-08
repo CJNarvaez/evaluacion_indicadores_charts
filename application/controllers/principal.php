@@ -468,7 +468,7 @@ class Principal extends CI_Controller
         {
             
             $this->load->model('md_reporte');
-            $datos = $this->md_reporte->administrador2n($this->input->post('mes'),$this->input->post('anio'),$this->input->post('hc'));
+            $datos = $this->md_reporte->administrador2n($this->input->post('mes'),$this->input->post('anio'),$this->input->post('hghehc'));
             
             $this->load->view("vw_reporta_evaluacion",$datos);
             //$this->load->view('vw_footer');
@@ -534,7 +534,7 @@ class Principal extends CI_Controller
             $this->load->model('md_unidad_medica');
             $this->load->model('md_ind_hosp');
             $indicador = new Md_ind_hosp();
-            $datos['meses'] = $indicador->meses_capturados('2014'); 
+            $datos['meses'] = $indicador->meses_capturados('2015'); 
             $datos['um'] = $this->md_unidad_medica->menu_desplegable(array('H.C.','H.G.','H.E.'));
             $datos['um']['HG'] = 'ESTATAL H.G.';
             $datos['um']['HC'] = 'ESTATAL H.C.';
@@ -610,7 +610,7 @@ class Principal extends CI_Controller
         $indicador = new Md_ind_hosp();
         //$datos['mes'] = $indicador->meses_capturados('2014');
         //print_r( sizeof($datos['mes']) );
-        $data['mes'] = sizeof($indicador->meses_capturados('2014'));
+        $data['mes'] = sizeof($indicador->meses_capturados('2015'));
         
         $data['meses'] = array('ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC');
         
@@ -640,7 +640,7 @@ class Principal extends CI_Controller
         $this->load->model('md_ind_hosp');
         $indicador = new Md_ind_hosp();
 
-        $data['mes'] = sizeof($indicador->meses_capturados('2014'));
+        $data['mes'] = sizeof($indicador->meses_capturados('2015'));
 
         $this->load->view('prueba3',$data);  
     }        

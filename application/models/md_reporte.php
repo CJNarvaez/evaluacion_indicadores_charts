@@ -78,6 +78,7 @@ class Md_reporte extends CI_Model
      */
     function administradorHC($mes, $anio, $hc)
     {
+        //$this->output->enable_profiler();
         //CONSULTAR FECHA DE LA INFORMACION
         $this->load->model('md_informacion');
         $mesInformacion = $this->md_informacion->mesActual();
@@ -93,6 +94,7 @@ class Md_reporte extends CI_Model
         $unidades_medida = array();
         for($i = 1; $i<= 82;$i++)
             $unidades_medida[] = $i;
+        //$unidades_medida[] = 11;
         $this->load->helpers(array('form','html','url'));
         $this->load->library('table'); 
         
@@ -300,8 +302,9 @@ class Md_reporte extends CI_Model
      * @param str um
      * @return Array
      */
-    function Administrador2n($mes,$anio,$hc)
+    function administrador2n($mes,$anio,$hc)
     {
+        echo "hosp".$hc;
         //$this->output->enable_profiler();
         //CONSULTAR FECHA DE LA INFORMACION
         $this->load->model('md_informacion');
@@ -608,6 +611,8 @@ class Md_reporte extends CI_Model
             $unidadMedidaDepartamento[$ren->id] = $ren->departamento;
         }
         
+        //$unidades_medida[] = 177;
+        
         $this->load->helpers(array('form','html','url'));
         $this->load->library('table'); 
         
@@ -897,6 +902,8 @@ class Md_reporte extends CI_Model
             $unidades_medida[] = $ren->id;
             $unidadMedidaDepartamento[$ren->id] = $ren->departamento;
         }
+        
+        //$unidades_medida[] = 177;
         
         $this->load->helpers(array('form','html','url'));
         $this->load->library('table'); 

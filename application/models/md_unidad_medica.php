@@ -98,6 +98,14 @@ class Md_unidad_medica extends CI_Model
             $nombre = $ren->nombre;
         return $nombre;
     }
+    public function cluesID($clues)
+    {
+        $this->db->where('clues',$clues);
+        $consulta = $this->db->get('um');
+        foreach($consulta->result() as $ren)
+            $id = $ren->id;
+        return $id;
+    }    
 }
 
 ?>
