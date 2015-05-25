@@ -336,7 +336,7 @@ class MD_indicador extends CI_Model
         
         
         $ind = (int) substr($nombre,4,strlen($nombre));
-        //echo $id_um."<br />";
+        //echo $ind."<br />";
         
         $this->db->where('id_ind',$ind);        
         if($acumular != 'NO')

@@ -69,7 +69,11 @@ class Md_graficaIndHosp extends CI_Controller
     }
     
     function ind_hosp($um,$mes,$anio)
-    {        
+    {
+        if($um->id == 223)
+            $um->camas_trauma = $um->camas_otros;
+        
+        //print_r($um);
         $this->load->model('md_ind_hosp');
         $ind_hosp = new Md_ind_hosp($um->id,$mes,$anio);
         
@@ -78,7 +82,7 @@ class Md_graficaIndHosp extends CI_Controller
         if($um->id == 'HC')
                 $um->id = "H.C.";
                 elseif($um->id == 'HG')
-                        $um->id = "H.G.";        
+                        $um->id = "H.G.";      
                 
         if($um->id == 'H.C.' OR $um->id == 'H.G.')
         {
@@ -315,7 +319,9 @@ class Md_graficaIndHosp extends CI_Controller
             $dias_cama_acu = $mes_num * 30 * $um->camas_trauma;
             //echo $dias_cama_acu;
         }
-        
+        else
+            $dias_cama_acu = 365 * $um->camas_trauma;
+
         if($um->camas_trauma != 0)
         {
             $trauma_porc_ocup_men = $ind_hosp->trauma_dias_pac_men / $dias_cama_men * 100;
@@ -360,6 +366,8 @@ class Md_graficaIndHosp extends CI_Controller
             $dias_cama_acu = $mes_num * $dias_cama_men;
             //echo $dias_cama_acu;
         }
+        else
+            $dias_cama_acu = ($um->camas_trauma + $um->camas_ginecologia + $um->camas_pediatria + $um->camas_med_interna + $um->camas_cirugia) * 365;
         
         if($um->camas_trauma + $um->camas_ginecologia + $um->camas_pediatria + $um->camas_med_interna + $um->camas_cirugia != 0)
         {
@@ -494,7 +502,10 @@ class Md_graficaIndHosp extends CI_Controller
         $this->table->add_row('MEDICINA INTERNA',$um->camas_med_interna,$med_int_porc_ocup_men_celda,$med_int_porc_ocup_acu_celda,$med_int_ind_rot_men_celda,$med_int_ind_rot_acu_celda,$med_int_int_sust_men_celda,$med_int_int_sust_acu_celda,$med_int_tasa_mort_bruta_celda,$med_int_tasa_mort_ajus_celda,$med_int_dias_est_men_celda,$med_int_dias_est_acu_celda);
         $this->table->add_row('PEDIATRIA',$um->camas_pediatria,$pediatria_porc_ocup_men_celda,$pediatria_porc_ocup_acu_celda,$pediatria_ind_rot_men_celda,$pediatria_ind_rot_acu_celda,$pediatria_int_sust_men_celda,$pediatria_int_sust_acu_celda,$pediatria_tasa_mort_bruta_celda,$pediatria_tasa_mort_ajus_celda,$pediatria_dias_est_men_celda,$pediatria_dias_est_acu_celda);
         $this->table->add_row('GINECOLOGIA',$um->camas_ginecologia,$ginecologia_porc_ocup_men_celda,$ginecologia_porc_ocup_acu_celda,$ginecologia_ind_rot_men_celda,$ginecologia_ind_rot_acu_celda,$ginecologia_int_sust_men_celda,$ginecologia_int_sust_acu_celda,$ginecologia_tasa_mort_bruta_celda,$ginecologia_tasa_mort_ajus_celda,$ginecologia_dias_est_men_celda,$ginecologia_dias_est_acu_celda);
-        $this->table->add_row('TRAUMATOLOGIA',$um->camas_trauma,$trauma_porc_ocup_men_celda,$trauma_porc_ocup_acu_celda,$trauma_ind_rot_men_celda,$trauma_ind_rot_acu_celda,$trauma_int_sust_men_celda,$trauma_int_sust_acu_celda,$trauma_tasa_mort_bruta_celda,$trauma_tasa_mort_ajus_celda,$trauma_dias_est_men_celda,$trauma_dias_est_acu_celda);
+        if($um->id == 223)
+            $this->table->add_row('PSIQUIATRIA',$um->camas_trauma,$trauma_porc_ocup_men_celda,$trauma_porc_ocup_acu_celda,$trauma_ind_rot_men_celda,$trauma_ind_rot_acu_celda,$trauma_int_sust_men_celda,$trauma_int_sust_acu_celda,$trauma_tasa_mort_bruta_celda,$trauma_tasa_mort_ajus_celda,$trauma_dias_est_men_celda,$trauma_dias_est_acu_celda);
+        else
+            $this->table->add_row('TRAUMATOLOGIA',$um->camas_trauma,$trauma_porc_ocup_men_celda,$trauma_porc_ocup_acu_celda,$trauma_ind_rot_men_celda,$trauma_ind_rot_acu_celda,$trauma_int_sust_men_celda,$trauma_int_sust_acu_celda,$trauma_tasa_mort_bruta_celda,$trauma_tasa_mort_ajus_celda,$trauma_dias_est_men_celda,$trauma_dias_est_acu_celda);
         $this->table->add_row('TOTAL',$total_camas,$total_porc_ocup_men_celda,$total_porc_ocup_acu_celda,$total_ind_rot_men_celda,$total_ind_rot_acu_celda,$total_int_sust_men_celda,$total_int_sust_acu_celda,$total_tasa_mort_bruta_celda,$total_tasa_mort_ajus_celda,$total_dias_est_men_celda,$total_dias_est_acu_celda);
         
         $datos['porc_ocup_men'] = (float) number_format($porc_ocup_men,2);

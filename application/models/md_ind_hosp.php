@@ -168,6 +168,17 @@ Class Md_ind_hosp extends CI_Model
             $this->calcular($def,5,1,$hc);
             $this->calcular($def_48,5,0,$hc);
             $this->calcular($def_48,5,1,$hc);
+          
+          if($this->um == 223){  
+            $dias_pac = 44;
+            $egresos = 43;
+            
+            $this->calcular($dias_pac,6,0,$hc);
+            $this->calcular($dias_pac,6,1,$hc);        
+            $this->calcular($egresos,6,0,$hc);
+            $this->calcular($egresos,6,1,$hc);
+          }
+            
         }
     }
     
@@ -286,7 +297,7 @@ Class Md_ind_hosp extends CI_Model
         //CONVIERTE A ENTERO EL MES PORQUE DESPUES NO LO QUIERE LA CONSULTA A LA BD
         $mes = (int) $this->mes;
                         
-        //$this->output->enable_profiler();
+       // $this->output->enable_profiler();
         
         //SI NO SE PIDE EL ACUMULADO
         if($acu === 0)
@@ -383,6 +394,14 @@ Class Md_ind_hosp extends CI_Model
                             case 20: $this->trauma_defun_48hrs_men += $ren->dato;
                                     break;
                         }
+                    else if($servicio == 6)
+                        switch ($id)
+                        {
+                            case 44: $this->trauma_dias_pac_men += $ren->dato;
+                                    break;
+                            case 43: $this->trauma_egresos_men += $ren->dato;
+                                    break;
+                        }
             if($acu == 1 && $hc == 0)
                 if($servicio == 1)
                     switch ($id)
@@ -442,6 +461,14 @@ Class Md_ind_hosp extends CI_Model
                             case 15: $this->trauma_defun_acu += $ren->dato;
                                     break;
                             case 20: $this->trauma_defun_48hrs_acu += $ren->dato;
+                                    break;
+                        }
+                    else if($servicio == 6)
+                        switch ($id)
+                        {
+                            case 44: $this->trauma_dias_pac_acu += $ren->dato;
+                                    break;
+                            case 43: $this->trauma_egresos_acu += $ren->dato;
                                     break;
                         }
         }

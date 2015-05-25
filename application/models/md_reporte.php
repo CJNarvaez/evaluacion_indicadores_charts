@@ -304,7 +304,7 @@ class Md_reporte extends CI_Model
      */
     function administrador2n($mes,$anio,$hc)
     {
-        echo "hosp".$hc;
+        //echo "hosp".$hc;
         //$this->output->enable_profiler();
         //CONSULTAR FECHA DE LA INFORMACION
         $this->load->model('md_informacion');
@@ -444,7 +444,7 @@ class Md_reporte extends CI_Model
                 
                 case 'todas': $meta = $zacatecas + $fresnillo + $jerez +
                                       $loreto + $calera + $trancoso +
-                                      $ojocaliente + $sombrerete + $valparaíso +
+                                      $ojocaliente + $sombrerete + $valparaiso +
                                       $juan_aldama + $jalpa + $juchipila +
                                       $tabasco + $nochistlan + $villa_de_cos +
                                       $mujer + $psiquiatrico;
@@ -757,7 +757,7 @@ class Md_reporte extends CI_Model
             //PARA LOS TITULOS DEL DEPARTAMENTO
             if($titulosTabla[$unidadMedidaDepartamento[$row2]] != ""){
                 $estiloTituloDepartamento = array('data' => $titulosTabla[$unidadMedidaDepartamento[$row2]],
-                                                    'bgcolor' => 'lightgreen',
+                                                    'bgcolor' => 'green',
                                                     'colspan' => '3');
                 $this->table->add_row($estiloTituloDepartamento);
                 $titulosTabla[$unidadMedidaDepartamento[$row2]] = "";
