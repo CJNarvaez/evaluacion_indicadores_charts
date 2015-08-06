@@ -257,7 +257,6 @@ class Principal extends CI_Controller
             $this->load->view('vw_encabezado');        
             $this->load->view('vw_metadatos',$datos);
         }
-        
     }
     function reporte()
     {
@@ -646,23 +645,26 @@ class Principal extends CI_Controller
     }        
     function prueba_46ind($um,$mes,$anio)
     {
-        
-        //$this->load->model('Md_46ind');
-//        $nac_x_cesarea = new nac_x_cesarea();
-//        $nac_x_cesarea->anio = $anio;
-//        $nac_x_cesarea->mes = $mes;
-//        $nac_x_cesarea->hospital = $um;
-//        $nac_x_cesarea->reporte();
-//        echo $nac_x_cesarea->nombre.": ".$nac_x_cesarea->total;
+        /*
+        $this->load->model('Md_46ind');
+        $nac_x_cesarea = new nac_x_cesarea();
+        $nac_x_cesarea->anio = $anio;
+        $nac_x_cesarea->mes = $mes;
+        $nac_x_cesarea->hospital = $um;
+        $nac_x_cesarea->reporte();
+        echo "numerador : ".$nac_x_cesarea->numerador." denominador: ".$nac_x_cesarea->denominador."<br/>";
+        echo $nac_x_cesarea->nombre.": ".$nac_x_cesarea->total;
+        //print_r($nac_x_cesarea);*/
         
        
-        //$this->load->model('md_46ind');
-//        $prom_cons_emb = new prom_cons_pre_x_emb();
-//        $prom_cons_emb->juris = $um;
-//        $prom_cons_emb->mes = $mes;
-//        $prom_cons_emb->anio = $anio;
-//        $prom_cons_emb->reporte();
-//        echo $prom_cons_emb->total;
+        $this->output->enable_profiler();
+        $this->load->model('md_46ind');
+        $prom_cons_emb = new prom_cons_pre_x_emb();
+        $prom_cons_emb->juris = $um;
+        $prom_cons_emb->mes = $mes;
+        $prom_cons_emb->anio = $anio;
+        $prom_cons_emb->reporte();
+        echo $prom_cons_emb->total;
         
         /*$this->load->model('md_46ind');
         $prom_cons_emb = new usuarias_act_pf();
@@ -671,10 +673,11 @@ class Principal extends CI_Controller
         $prom_cons_emb->anio = $anio;
         $prom_cons_emb->reporte();
         echo $prom_cons_emb->total;*/
-        $this->load->model('md_indicador_nuevo');
-        $indicador = new Md_indicador_1er(11);
+        
+        //$this->load->model('md_indicador_nuevo');
+        //$indicador = new Md_indicador_1er(11);
         //print_r($indicador);
-        $indicador->reportar_mes($mes,$anio,$um);
+        //$indicador->reportar_mes($mes,$anio,$um);
     }
 }
 

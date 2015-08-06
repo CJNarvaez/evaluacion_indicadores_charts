@@ -72,8 +72,13 @@ class nac_x_cesarea extends md_46ind
     
     public function reporte()
     {
-        //$this->output->enable_profiler();
-        $this->db->where('id_ind',43);
+        //  $this->output->enable_profiler();
+        
+        //  formula para el calculo "cesareas/nacimientos x 100"
+        //  el indicador 24 es partos distocicos
+        $this->db->select_sum('dato');
+        $this->db->group_by('id_ind');
+        $this->db->where('id_ind',24);
         $this->db->where('mes <=',$this->mes);
         $this->db->where('anio',$this->anio);
         $this->db->where('id_um',$this->hospital);
@@ -82,6 +87,9 @@ class nac_x_cesarea extends md_46ind
         foreach($consulta->result() as $ren)
             $this->numerador = $ren->dato;
         
+        //  el indicador 22 es partos
+        $this->db->select_sum('dato');
+        $this->db->group_by('id_ind');
         $this->db->where('id_ind',22);
         $this->db->where('mes <=',$this->mes);
         $this->db->where('anio',$this->anio);
