@@ -658,6 +658,9 @@ class Principal extends CI_Controller
         
        
         $this->output->enable_profiler();
+
+        /*
+        //  las juris se tienen que definir de modo 01, 02, 03, etc.
         $this->load->model('md_46ind');
         $prom_cons_emb = new prom_cons_pre_x_emb();
         $prom_cons_emb->juris = $um;
@@ -665,19 +668,49 @@ class Principal extends CI_Controller
         $prom_cons_emb->anio = $anio;
         $prom_cons_emb->reporte();
         echo $prom_cons_emb->total;
-        
-        /*$this->load->model('md_46ind');
+        */
+
+        /*
+        $this->load->model('md_46ind');
         $prom_cons_emb = new usuarias_act_pf();
         $prom_cons_emb->juris = $um;
         $prom_cons_emb->mes = $mes;
         $prom_cons_emb->anio = $anio;
         $prom_cons_emb->reporte();
-        echo $prom_cons_emb->total;*/
+        echo "numerador : ".$prom_cons_emb->numerador." denominador: ".$prom_cons_emb->denominador."<br/>";
+        echo $prom_cons_emb->total;
+         */
+        
+        /*
+        $this->load->model('md_46ind');
+        $prom_cons_med = new Prom_diario_consulta_x_medico();
+        $prom_cons_med->juris = $um;
+        $prom_cons_med->mes = $mes;
+        $prom_cons_med->anio = $anio;
+        $prom_cons_med->reporte();
+        echo "numerador : ".$prom_cons_med->numerador." denominador: ".$prom_cons_med->denominador."<br/>";
+        echo $prom_cons_med->total;
+        */
+        
+
+        $this->load->model('md_46ind');
+        $porc_ocup_hosp = new Porc_ocupacion_hosp();
+        $porc_ocup_hosp->juris = $um;
+        $porc_ocup_hosp->mes = $mes;
+        $porc_ocup_hosp->anio = $anio;
+        $porc_ocup_hosp->reporte();
+        echo "numerador : ".$porc_ocup_hosp->numerador." denominador: ".$porc_ocup_hosp->denominador."<br/>";
+        echo $porc_ocup_hosp->total;
+        
         
         //$this->load->model('md_indicador_nuevo');
         //$indicador = new Md_indicador_1er(11);
         //print_r($indicador);
         //$indicador->reportar_mes($mes,$anio,$um);
+    }
+    function indRes()
+    {
+        $this->load->view('vw_indRes');
     }
 }
 

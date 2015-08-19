@@ -7,7 +7,7 @@
 
 class Md_46ind extends CI_Model
 {
-    public $nombre,$total,$mes,$anio,$num_vars,$den_vars,$var_nom,$numerador,$denominador,$juris;
+    public $nombre,$total,$mes,$anio,$num_vars,$den_vars,$var_nom,$numerador,$denominador,$juris,$noAcumular,$noJur;
     public function __construct()
     {
         parent ::__construct();
@@ -45,9 +45,22 @@ class Md_46ind extends CI_Model
             $this->db->where_in('nombre',$this->num_vars);
         else
             $this->db->where_in('nombre',$this->den_vars);
-        $this->db->where('mes <=',$this->mes);
+
+        // EN LAS USUARIAS ACTIVAS NO SE ACUMULAN LOS DATOS
+        if($this->noAcumular)
+            $this->db->where('mes',$this->mes);
+        else 
+            $this->db->where('mes <=',$this->mes);
+
         $this->db->where('anio',$this->anio);
-        $this->db->where('cve_jur',$this->juris);
+        
+        //  CUANDO NO SE PIDE UNA JURIS
+        if ($this->noJur) {
+            $this->db->where('id_um',$this->juris);
+        }
+        else
+            $this->db->where('cve_jur',$this->juris);
+        
         $this->db->group_by('anio');
         $consulta = $this->db->get('vw_sis');
         //print_r($consulta->result_array());
@@ -155,6 +168,7 @@ class usuarias_act_pf extends Md_46ind
     {
         parent::__construct();
         $this->nombre = "USUARIAS ACTIVAS DE P.F. X 100 M.E.F.U.";
+        $this->noAcumular = 1;
         
         //PARA USUARIAS ACTIVAS
         $this->db->where('id',3);
@@ -208,12 +222,56 @@ class Prom_diario_consulta_x_medico extends Md_46ind
         //PARA CALCULAR TOTAL DE CONSULTAS POR EMBARAZADA
         $this->calcular_num('num');
         
-        //PARA M.E.F.
+        //PARA Numero de Medicos
         $this->db->where('anio',$this->anio);
         $this->db->where('juris',$this->juris);
-        $consulta = $this->db->get('46ind_mef');
+        $consulta = $this->db->get('46ind_nmed');
         foreach($consulta->result() as $ren)
             $this->denominador = $ren->dato;
+
+        //  la formula es NumMed * 21 dias al mes
+        $dias = (int) $this->mes * 21;
+        $this->denominador = $this->denominador * $dias;
+
+        if( $this->denominador != 0)
+            $this->total = $this->numerador / $this->denominador;
+        else
+            $this->total = 0;
+    }
+}
+class Porc_ocupacion_hosp extends Md_46ind
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "PROMEDIO DIARIO DE CONSULTA POR MEDICO";
+        $this->noJur = 1;
+        
+        //PARA TOTAL DE CONSULTAS
+        $this->db->where('id',5);
+        $consulta = $this->db->get('46ind_ind');
+        foreach($consulta->result() as $ren)
+        {
+            $variable = explode(',',$ren->calculo);
+            foreach($variable as $var)
+                $this->agregar('numerador',$var);
+        }
+    }
+    public function reporte()
+    {
+        //$this->output->enable_profiler();        
+        //PARA CALCULAR TOTAL DE DIAS PACIENTE
+        $this->calcular_num('num');
+        
+        //PARA Numero de Camas
+        $this->db->where('id',$this->juris);
+        $consulta = $this->db->get('um');
+        foreach($consulta->result() as $ren)
+            $this->denominador = $ren->camas_total;
+
+        //  la formula es diasPac * 30 dias al mes
+        $dias = (int) $this->mes * 30;
+        $this->denominador = $this->denominador * $dias;
 
         if( $this->denominador != 0)
             $this->total = $this->numerador / $this->denominador * 100;
