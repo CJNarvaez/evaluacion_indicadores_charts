@@ -645,6 +645,7 @@ class Principal extends CI_Controller
     }        
     function prueba_46ind($um,$mes,$anio)
     {
+        $this->output->enable_profiler();
         /*
         $this->load->model('Md_46ind');
         $nac_x_cesarea = new nac_x_cesarea();
@@ -654,10 +655,8 @@ class Principal extends CI_Controller
         $nac_x_cesarea->reporte();
         echo "numerador : ".$nac_x_cesarea->numerador." denominador: ".$nac_x_cesarea->denominador."<br/>";
         echo $nac_x_cesarea->nombre.": ".$nac_x_cesarea->total;
-        //print_r($nac_x_cesarea);*/
-        
-       
-        $this->output->enable_profiler();
+        //print_r($nac_x_cesarea);
+        */
 
         /*
         //  las juris se tienen que definir de modo 01, 02, 03, etc.
@@ -688,25 +687,69 @@ class Principal extends CI_Controller
         $prom_cons_med->mes = $mes;
         $prom_cons_med->anio = $anio;
         $prom_cons_med->reporte();
+        echo $prom_cons_med->nombre."<br />";
         echo "numerador : ".$prom_cons_med->numerador." denominador: ".$prom_cons_med->denominador."<br/>";
         echo $prom_cons_med->total;
         */
         
-
+        /*
         $this->load->model('md_46ind');
         $porc_ocup_hosp = new Porc_ocupacion_hosp();
         $porc_ocup_hosp->juris = $um;
         $porc_ocup_hosp->mes = $mes;
         $porc_ocup_hosp->anio = $anio;
         $porc_ocup_hosp->reporte();
+        echo $porc_ocup_hosp->nombre."<br />";
         echo "numerador : ".$porc_ocup_hosp->numerador." denominador: ".$porc_ocup_hosp->denominador."<br/>";
         echo $porc_ocup_hosp->total;
+        */
         
-        
+        /*
+        $this->load->model('md_46ind');
+        $prom_dias_est = new prom_dias_est();
+        $prom_dias_est->juris = $um;
+        $prom_dias_est->mes = $mes;
+        $prom_dias_est->anio = $anio;
+        $prom_dias_est->reporte();
+        echo $prom_dias_est->nombre."<br />";
+        echo "numerador : ".$prom_dias_est->numerador." denominador: ".$prom_dias_est->denominador."<br/>";
+        echo $prom_dias_est->total;
+        */
+       /*
+        $this->load->model('md_46ind');
+        $inter_quir_x_quir = new inter_quir_x_quir();
+        $inter_quir_x_quir->juris = $um;
+        $inter_quir_x_quir->mes = $mes;
+        $inter_quir_x_quir->anio = $anio;
+        $inter_quir_x_quir->reporte();
+        echo $inter_quir_x_quir->nombre."<br />";
+        echo "numerador : ".$inter_quir_x_quir->numerador." denominador: ".$inter_quir_x_quir->denominador."<br/>";
+        echo $inter_quir_x_quir->total;
+        */
         //$this->load->model('md_indicador_nuevo');
         //$indicador = new Md_indicador_1er(11);
         //print_r($indicador);
         //$indicador->reportar_mes($mes,$anio,$um);
+        /*
+        $this->load->model('md_46ind');
+        $morbTbPulmonar = new morbTbPulmonar();
+        $morbTbPulmonar->juris = $um;
+        $morbTbPulmonar->mes = $mes;
+        $morbTbPulmonar->anio = $anio;
+        $morbTbPulmonar->reporte();
+        echo $morbTbPulmonar->nombre."<br />";
+        echo "numerador : ".$morbTbPulmonar->numerador." denominador: ".$morbTbPulmonar->denominador."<br/>";
+        echo $morbTbPulmonar->total;
+        */
+        $this->load->model('md_46ind');
+        $nuevosTbTaesTerm = new nuevosTbTaesTerm();
+        $nuevosTbTaesTerm->juris = $um;
+        $nuevosTbTaesTerm->mes = $mes;
+        $nuevosTbTaesTerm->anio = $anio;
+        $nuevosTbTaesTerm->reporte();
+        echo $nuevosTbTaesTerm->nombre."<br />";
+        echo "numerador : ".$nuevosTbTaesTerm->numerador." denominador: ".$nuevosTbTaesTerm->denominador."<br/>";
+        echo $nuevosTbTaesTerm->total;
     }
     function indRes()
     {

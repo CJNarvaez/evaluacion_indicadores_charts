@@ -7,7 +7,7 @@
 
 class Md_46ind extends CI_Model
 {
-    public $nombre,$total,$mes,$anio,$num_vars,$den_vars,$var_nom,$numerador,$denominador,$juris,$noAcumular,$noJur;
+    public $nombre,$total,$mes,$mesTxt,$anio,$num_vars,$den_vars,$var_nom,$numerador,$denominador,$juris,$noAcumular,$noJur,$logroEstatal;
     public function __construct()
     {
         parent ::__construct();
@@ -72,18 +72,64 @@ class Md_46ind extends CI_Model
                 $this->denominador = $ren->logro;
         } 
     }
+
+    public function mesNumTxt()
+    {
+        switch ($this->mes) {
+            case '01':
+                $this->mesTxt = "Enero";
+                break;
+            case '02':
+                $this->mesTxt = "Febrero";
+                break;
+            case '03':
+                $this->mesTxt = "Marzo";
+                break;
+            case '04':
+                $this->mesTxt = "Abril";
+                break;
+            case '05':
+                $this->mesTxt = "Mayo";
+                break;
+            case '06':
+                $this->mesTxt = "Junio";
+                break;
+            case '07':
+                $this->mesTxt = "Julio";
+                break;
+            case '08':
+                $this->mesTxt = "Agosto";
+                break;
+            case '09':
+                $this->mesTxt = "Septiembre";
+                break;
+            case '10':
+                $this->mesTxt = "Octubre";
+                break;
+            case '11':
+                $this->mesTxt = "Noviembre";
+                break;
+            case '12':
+                $this->mesTxt = "Diciembre";
+                break;
+            
+            default:
+                $this->mesTxt = "Vacio";
+                break;
+        }
+    }
 }
 
 class nac_x_cesarea extends md_46ind
 {
-    public $hospital,$cesareas,$nacimientos;
+    public $cesareas,$nacimientos;
     public function __construct()
     {
         parent::__construct();
         $this->nombre = "NACIMIENTOS POR CESAREA";
     }
     
-    public function reporte()
+    public function reporte($hospital)
     {
         //  $this->output->enable_profiler();
         
@@ -94,7 +140,7 @@ class nac_x_cesarea extends md_46ind
         $this->db->where('id_ind',24);
         $this->db->where('mes <=',$this->mes);
         $this->db->where('anio',$this->anio);
-        $this->db->where('id_um',$this->hospital);
+        $this->db->where('id_um',$hospital);
         $consulta = $this->db->get('saeh_reporte');
         
         foreach($consulta->result() as $ren)
@@ -106,7 +152,7 @@ class nac_x_cesarea extends md_46ind
         $this->db->where('id_ind',22);
         $this->db->where('mes <=',$this->mes);
         $this->db->where('anio',$this->anio);
-        $this->db->where('id_um',$this->hospital);
+        $this->db->where('id_um',$hospital);
         $consulta = $this->db->get('saeh_reporte');
         
         foreach($consulta->result() as $ren)
@@ -116,6 +162,33 @@ class nac_x_cesarea extends md_46ind
             $this->total = $this->numerador / $this->denominador * 100;
         else
             $this->total = 0;
+    }
+
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de los Hospitales Generales y la Mujer
+        //  HG FRESNILLO, HG LORETO, HG JEREZ, MUJER
+        $idHosp = array(13,231,57,203);
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idHosp as $id) {
+            $this->reporte($id);
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100;
+        else
+            $this->logroEstatal['estatal'] = 0;
     }
 }
 
@@ -148,7 +221,7 @@ class prom_cons_pre_x_emb extends Md_46ind
     }
     public function __destruct()
     {
-        echo "destruyendo";
+        //echo "destruyendo";
     }
     public function reporte()
     {
@@ -160,6 +233,32 @@ class prom_cons_pre_x_emb extends Md_46ind
         $this->calcular_num('den');
             
         $this->total = $this->numerador / $this->denominador;
+    }
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador;
+        else
+            $this->logroEstatal['estatal'] = 0;
     }
 }
 class usuarias_act_pf extends Md_46ind
@@ -197,6 +296,167 @@ class usuarias_act_pf extends Md_46ind
             $this->total = $this->numerador / $this->denominador * 100;
         else
             $this->total = 0;
+    }
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+
+/**
+*  MORBILIDAD POR T.B. PULMONAR
+*  Casos Nuevos / Población Total x 100,000
+*/
+class morbTbPulmonar extends Md_46ind
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "MORBILIDAD POR T.B. PULMONAR";
+    }
+
+    function reporte()
+    {
+        //  1. Obten casos Nuevos (Numerador ind. 24)
+        //  guarda en $this->numerador
+        $this->db->select_sum('logro');
+        $this->db->group_by('id_ind');
+        $this->db->where('id_ind', 24);
+        $this->db->where('jurisdiccion', $this->juris);
+        $anioMes = ($this->anio * 100) + (int) $this->mes;
+        $this->db->where('aniomes <=', $anioMes);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            $this->numerador = $res->logro;
+        
+        //  2. Obtener la poblacion total
+        //  guarda en $this->denominador
+        $this->db->where('jurisdiccion', $this->juris);
+        $this->db->where('anio', $this->anio);
+        $consulta = $this->db->get('46ind_poblacion');
+
+        foreach ($consulta->result() as $res)
+            $this->denominador = $res->total;
+
+        //  Casos Nuevos / Población Total x 100,000
+        //  Guardar en $this->total
+        $this->total = $this->numerador / $this->denominador * 100000;
+    }
+
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100000;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+
+/**
+* % DE CASOS NVOS. T.B. CON TAES TERMINADO
+*/
+class nuevosTbTaesTerm extends Md_46ind
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "CASOS NVOS. T.B. CON TAES TERMINADO";
+    }
+
+    function reporte()
+    {
+        $this->denominador = 0;
+        //  1. Obtener TAES Terminado (Numerador ind 25)
+        //  guardar en $this->numerador
+        //  2. Obtener Ingresos (Denominador ind 25)
+        //  gardar en $this->denominador
+        $this->db->select('num_den');
+        $this->db->select_sum('logro');
+        $this->db->group_by('num_den');
+        $this->db->where('id_ind', 25);
+        $anioMes = $this->anio * 100 + (int) $this->mes;
+        $this->db->where('anioMes <=', $anioMes);
+        $this->db->where('jurisdiccion', $this->juris);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            if ($res->num_den)
+                $this->numerador = $res->logro;
+            else
+                $this->denominador = $res->logro;
+            
+        //  TAES / Ingresos *100
+        //  guardar en $this->total
+        if ($this->denominador != 0)
+            $this->total = $this->numerador / $this->denominador *100;
+        else
+            $this->total = 0;
+    }
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100;
+        else
+            $this->logroEstatal['estatal'] = 0;
     }
 }
 class Prom_diario_consulta_x_medico extends Md_46ind
@@ -238,13 +498,39 @@ class Prom_diario_consulta_x_medico extends Md_46ind
         else
             $this->total = 0;
     }
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
 }
 class Porc_ocupacion_hosp extends Md_46ind
 {
     public function __construct()
     {
         parent::__construct();
-        $this->nombre = "PROMEDIO DIARIO DE CONSULTA POR MEDICO";
+        $this->nombre = "PORCENTAJE DE OCUPACION HOSPITALARIA";
         $this->noJur = 1;
         
         //PARA TOTAL DE CONSULTAS
@@ -257,26 +543,228 @@ class Porc_ocupacion_hosp extends Md_46ind
                 $this->agregar('numerador',$var);
         }
     }
-    public function reporte()
+    public function reporte($juris)
     {
-        //$this->output->enable_profiler();        
-        //PARA CALCULAR TOTAL DE DIAS PACIENTE
-        $this->calcular_num('num');
+        // $this->output->enable_profiler();        
+        // PARA CALCULAR TOTAL DE DIAS PACIENTE
+        // $this->calcular_num('num'); <-- obsoleto no viene de SIS viene de SAEH
+        $this->db->select_sum('dato');
+        $this->db->group_by('anio');
+        $this->db->where_in('id_ind',array(1,2,3,4,5));
+        $this->db->where('id_um', $juris);
+        $consulta = $this->db->get('saeh_reporte');
+        foreach ($consulta->result() as $ren) {
+            $this->numerador = $ren->dato;
+        }
         
         //PARA Numero de Camas
-        $this->db->where('id',$this->juris);
+        $this->db->where('id',$juris);
         $consulta = $this->db->get('um');
         foreach($consulta->result() as $ren)
             $this->denominador = $ren->camas_total;
 
         //  la formula es diasPac * 30 dias al mes
-        $dias = (int) $this->mes * 30;
+        if ($this->mes == "12") 
+            $dias = 365;
+        else
+            $dias = (int) $this->mes * 30;
         $this->denominador = $this->denominador * $dias;
 
         if( $this->denominador != 0)
             $this->total = $this->numerador / $this->denominador * 100;
         else
             $this->total = 0;
+    }
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de los Hospitales Generales y la Mujer
+        //  HG FRESNILLO, HG LORETO, HG JEREZ, MUJER, HG ZACATECAS
+        $idHosp = array(13,231,57,203,259);
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idHosp as $id) {
+            $this->reporte($id);
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+class prom_dias_est extends Md_46ind
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "PROMEDIO DE DIAS ESTANCIA";
+        $this->noJur = 1;
+        
+        //PARA TOTAL DE CONSULTAS
+        $this->db->where('id',5);
+        $consulta = $this->db->get('46ind_ind');
+        foreach($consulta->result() as $ren)
+        {
+            $variable = explode(',',$ren->calculo);
+            foreach($variable as $var)
+                $this->agregar('numerador',$var);
+        }
+    }
+    public function reporte($juris)
+    {
+        // $this->output->enable_profiler();        
+        // PARA CALCULAR TOTAL DE "DIAS PACIENTE" SON LO MISMO QUE "DIAS ESTANCIA"
+        // $this->calcular_num('num'); <-- obsoleto no viene de SIS viene de SAEH
+        $this->db->select_sum('dato');
+        $this->db->group_by('anio');
+        $this->db->where_in('id_ind',array(1,2,3,4,5,44));
+        $this->db->where('id_um', $juris);
+        $consulta = $this->db->get('saeh_reporte');
+        foreach ($consulta->result() as $ren) {
+            $this->numerador = $ren->dato;
+        }
+        
+        //PARA EGRESOS
+        $this->db->select_sum('dato');
+        $this->db->group_by('anio');
+        $this->db->where_in('id_ind',array(6,7,8,9,10,43));
+        $this->db->where('id_um', $juris);
+        $consulta = $this->db->get('saeh_reporte');
+        foreach($consulta->result() as $ren)
+            $this->denominador = $ren->dato;
+
+        //  la formula es dias_pac / egresos
+        if( $this->denominador != 0)
+            $this->total = $this->numerador / $this->denominador;
+        else
+            $this->total = 0;
+    }
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de los Hospitales Generales y la Mujer
+        //  HG FRESNILLO, HG LORETO, HG JEREZ, MUJER, HG ZACATECAS
+        $idHosp = array(13,231,57,203,259);
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idHosp as $id) {
+            $this->reporte($id);
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+class inter_quir_x_quir extends Md_46ind
+{
+    public function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "PROMEDIO DIARIO DE INTERVENCIONES QUIRURGICAS POR QUIROFANO";
+        $this->noJur = 1;
+        
+        //PARA TOTAL DE CONSULTAS
+        $this->db->where('id',5);
+        $consulta = $this->db->get('46ind_ind');
+        foreach($consulta->result() as $ren)
+        {
+            $variable = explode(',',$ren->calculo);
+            foreach($variable as $var)
+                $this->agregar('numerador',$var);
+        }
+    }
+    public function reporte($juris)
+    {
+        // $this->output->enable_profiler();        
+        // PARA CALCULAR TOTAL DE "INTERVENCIONES QUIRURGICAS"
+        // $this->calcular_num('num'); <-- obsoleto no viene de SIS viene de SAEH
+        $this->db->select_sum('dato');
+        $this->db->group_by('anio');
+        $this->db->where('id_ind',41);
+        $this->db->where('id_um', $juris);
+        $consulta = $this->db->get('saeh_reporte');
+        foreach ($consulta->result() as $ren) {
+            $this->numerador = $ren->dato;
+        }
+        
+        //PARA N_SALAS_X_DIAS_TRANSCURRIDOS
+        switch ($juris) {
+            case 259:
+                $nSalas = 6;
+                break;
+            case 13:
+                $nSalas = 4;
+                break;
+            case 231:
+                $nSalas = 2;
+                break;
+            case 57:
+                $nSalas = 2;
+                break;
+            case 203:
+                $nSalas = 2;
+                break;
+        }
+        //  la formula es diasPac * 30 dias al mes
+        if ($this->mes == "12") 
+            $this->denominador = 365;
+        else
+            $this->denominador = (int) $this->mes * 30;
+
+        $this->denominador = $this->denominador * $nSalas;
+
+        //  la formula es dias_pac / egresos
+        if( $this->denominador != 0)
+            $this->total = $this->numerador / $this->denominador;
+        else
+            $this->total = 0;
+    }
+    public function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de los Hospitales Generales y la Mujer
+        //  HG FRESNILLO, HG LORETO, HG JEREZ, MUJER, HG ZACATECAS
+        $idHosp = array(13,231,57,203,259);
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idHosp as $id) {
+            $this->reporte($id);
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador;
+        else
+            $this->logroEstatal['estatal'] = 0;
     }
 }
 ?>
