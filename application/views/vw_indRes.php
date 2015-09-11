@@ -57,6 +57,11 @@
             <button class="btn btn-default ind" type="button" data-nombre="usuAct">Usuarias Activas</button>
             <button class="btn btn-default ind" type="button" data-nombre="morbTbPulmonar">Morbilidad T.B. Pulmonar</button>
             <button class="btn btn-default ind" type="button" data-nombre="nuevosTbTaesTerm">Nvos T.B. TAES Term</button>
+            <button class="btn btn-default ind" type="button" data-nombre="morbGonorrea">Morbilidad por Gonorrea</button>
+            <button class="btn btn-default ind" type="button" data-nombre="casosNuevosSifilis">Casos Nuevos Sifilis</button>
+            <button class="btn btn-default ind" type="button" data-nombre="morbSida">Morbilidad por SIDA</button>
+            <button class="btn btn-default ind" type="button" data-nombre="casosNuevosHA">Casos Nuevos Hipertension</button>
+            <button class="btn btn-default ind" type="button" data-nombre="casosNuevosDM">Casos Nuevos Diabetes</button>
             <button class="btn btn-default ind" type="button" data-nombre="promConsMed">Consulta X Medico</button>
             <button class="btn btn-default ind" type="button" data-nombre="porcOcuHosp">Ocupacion Hospitalaria</button>
             <button class="btn btn-default ind" type="button" data-nombre="promDiasEst">Promedio Dias Estancia</button>

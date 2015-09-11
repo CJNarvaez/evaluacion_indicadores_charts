@@ -102,6 +102,61 @@ class Ind_res extends CI_Controller {
 		$datos['completo'] = 1;
 		$this->load->view('vw_IndResJuris', $datos);
 	}
+	public function morbGonorrea($mes,$anio)
+	{
+		$this->load->model('Md_46ind');
+		$morbGonorrea = new morbGonorrea();
+		$morbGonorrea->anio = $anio;
+		$morbGonorrea->mes = $mes;
+		$morbGonorrea->reporteEstatal();
+		$datos['reporte'] = $morbGonorrea;
+		$datos['completo'] = 1;
+		$this->load->view('vw_IndResJuris', $datos);
+	}
+	public function morbSida($mes,$anio)
+	{
+		$this->load->model('Md_46ind');
+		$morbSida = new morbSida();
+		$morbSida->anio = $anio;
+		$morbSida->mes = $mes;
+		$morbSida->reporteEstatal();
+		$datos['reporte'] = $morbSida;
+		$datos['completo'] = 1;
+		$this->load->view('vw_IndResJuris', $datos);
+	}
+	public function casosNuevosSifilis($mes,$anio)
+	{
+		$this->load->model('Md_46ind');
+		$casosNuevosSifilis = new casosNuevosSifilis();
+		$casosNuevosSifilis->anio = $anio;
+		$casosNuevosSifilis->mes = $mes;
+		$casosNuevosSifilis->reporteEstatal();
+		$datos['reporte'] = $casosNuevosSifilis;
+		$datos['completo'] = 1;
+		$this->load->view('vw_IndResJuris', $datos);
+	}
+	public function casosNuevosHA($mes,$anio)
+	{
+		$this->load->model('Md_46ind');
+		$casosNuevosHA = new casosNuevosHA();
+		$casosNuevosHA->anio = $anio;
+		$casosNuevosHA->mes = $mes;
+		$casosNuevosHA->reporteEstatal();
+		$datos['reporte'] = $casosNuevosHA;
+		$datos['completo'] = 1;
+		$this->load->view('vw_IndResJuris', $datos);
+	}
+	public function casosNuevosDM($mes,$anio)
+	{
+		$this->load->model('Md_46ind');
+		$casosNuevosDM = new casosNuevosDM();
+		$casosNuevosDM->anio = $anio;
+		$casosNuevosDM->mes = $mes;
+		$casosNuevosDM->reporteEstatal();
+		$datos['reporte'] = $casosNuevosDM;
+		$datos['completo'] = 1;
+		$this->load->view('vw_IndResJuris', $datos);
+	}
 }
 
 /* End of file ind_res.php */

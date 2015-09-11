@@ -326,9 +326,9 @@ class usuarias_act_pf extends Md_46ind
 }
 
 /**
-*  MORBILIDAD POR T.B. PULMONAR
-*  Casos Nuevos / Población Total x 100,000
-*/
+ *  MORBILIDAD POR T.B. PULMONAR
+ *  Casos Nuevos / Población Total x 100,000
+ */
 class morbTbPulmonar extends Md_46ind
 {
     public function __construct()
@@ -394,8 +394,8 @@ class morbTbPulmonar extends Md_46ind
 }
 
 /**
-* % DE CASOS NVOS. T.B. CON TAES TERMINADO
-*/
+ * % DE CASOS NVOS. T.B. CON TAES TERMINADO
+ */
 class nuevosTbTaesTerm extends Md_46ind
 {
     public function __construct()
@@ -455,6 +455,316 @@ class nuevosTbTaesTerm extends Md_46ind
         //  calcula logro estatal
         if ($denominador != 0)
             $this->logroEstatal['estatal'] = $numerador / $denominador * 100;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+/**
+ * Morbilidad por Gonorrea
+ */
+class morbGonorrea extends Md_46ind
+{
+    
+    function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "MORBILIDAD POR GONORREA";
+    }
+    function reporte()
+    {
+        // 1. Obtener Casos Nuevos (ind 26) Numerador
+        $this->db->where('id_ind', 26);
+        $this->db->select_sum('logro');
+        $anioMes = $this->anio * 100 + (int) $this->mes;
+        $this->db->where('anioMes <=', $anioMes);
+        $this->db->where('jurisdiccion', $this->juris);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            $this->numerador = $res->logro;
+
+        // 2. Obtener la poblacion Denominador
+        $this->db->where('jurisdiccion', $this->juris);
+        $this->db->where('anio', $this->anio);
+        $consulta = $this->db->get('46ind_poblacion');
+
+        foreach ($consulta->result() as $res)
+            $this->denominador = $res->total;
+
+        // 3. Casos Nuevos / Poblacion * 100000
+        // 4. Guardar en $this->total
+        $this->total = $this->numerador / $this->denominador * 100000;
+    }
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100000;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+/**
+ * MORBILIDAD X SIDA SEGÚN FECHA DE DX
+ */
+class morbSida extends Md_46ind
+{
+    
+    function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "MORBILIDAD X SIDA SEGÚN FECHA DE DX";
+    }
+    function reporte()
+    {
+        // 1. Obtener Casos Nuevos (ind 29) Numerador
+        $this->db->where('id_ind', 29);
+        $this->db->select_sum('logro');
+        $anioMes = $this->anio * 100 + (int) $this->mes;
+        $this->db->where('anioMes <=', $anioMes);
+        $this->db->where('jurisdiccion', $this->juris);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            $this->numerador = $res->logro;
+
+        // 2. Obtener la poblacion Denominador
+        $this->db->where('jurisdiccion', $this->juris);
+        $this->db->where('anio', $this->anio);
+        $consulta = $this->db->get('46ind_poblacion');
+
+        foreach ($consulta->result() as $res)
+            $this->denominador = $res->total;
+
+        // 3. Casos Nuevos / Poblacion * 100000
+        // 4. Guardar en $this->total
+        $this->total = $this->numerador / $this->denominador * 100000;
+    }
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100000;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+/**
+ * CASOS NUEVOS DE SIFILIS CONGENITA
+ */
+class casosNuevosSifilis extends Md_46ind
+{
+    
+    function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "CASOS NUEVOS DE SIFILIS CONGENITA";
+    }
+    function reporte()
+    {
+        // 1. Obtener Casos Nuevos (ind 27) Numerador
+        $this->db->where('id_ind', 27);
+        $this->db->select_sum('logro');
+        $anioMes = $this->anio * 100 + (int) $this->mes;
+        $this->db->where('anioMes <=', $anioMes);
+        $this->db->where('jurisdiccion', $this->juris);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            $this->numerador = $res->logro;
+
+        // 2. Obtener la poblacion Denominador
+        $this->db->where('jurisdiccion', $this->juris);
+        $this->db->where('anio', $this->anio);
+        $consulta = $this->db->get('46ind_poblacion');
+
+        foreach ($consulta->result() as $res)
+            $this->denominador = $res->total;
+
+        // 3. Casos Nuevos / Poblacion * 100000
+        // 4. Guardar en $this->total
+        $this->total = $this->numerador / $this->denominador * 100000;
+    }
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100000;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+/**
+ * CASOS NVOS. DE H.A.S. 100,000 POBL. S.S.Z.
+ */
+class casosNuevosHA extends Md_46ind
+{
+    
+    function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "CASOS NVOS. DE H.A.S. 100,000 POBL S.S.Z.";
+    }
+    function reporte()
+    {
+        // 1. Obtener Casos Nuevos (ind 37) Numerador
+        $this->db->where('id_ind', 37);
+        $this->db->select_sum('logro');
+        $anioMes = $this->anio * 100 + (int) $this->mes;
+        $this->db->where('anioMes <=', $anioMes);
+        $this->db->where('jurisdiccion', $this->juris);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            $this->numerador = $res->logro;
+
+        // 2. Obtener la poblacion Denominador
+        $this->db->where('jurisdiccion', $this->juris);
+        $this->db->where('anio', $this->anio);
+        $consulta = $this->db->get('46ind_poblacion_ssz');
+
+        foreach ($consulta->result() as $res)
+            $this->denominador = $res->total;
+
+        // 3. Casos Nuevos / Poblacion * 100000
+        // 4. Guardar en $this->total
+        $this->total = $this->numerador / $this->denominador * 100000;
+    }
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100000;
+        else
+            $this->logroEstatal['estatal'] = 0;
+    }
+}
+/**
+ * CASOS NVOS. DE D.M. X 100,000 POBL. S.S.Z.
+ */
+class casosNuevosDM extends Md_46ind
+{
+    
+    function __construct()
+    {
+        parent::__construct();
+        $this->nombre = "CASOS NVOS. DE D.M. X 100,000 POBL S.S.Z.";
+    }
+    function reporte()
+    {
+        // 1. Obtener Casos Nuevos (ind 39) Numerador
+        $this->db->where('id_ind', 39);
+        $this->db->select_sum('logro');
+        $anioMes = $this->anio * 100 + (int) $this->mes;
+        $this->db->where('anioMes <=', $anioMes);
+        $this->db->where('jurisdiccion', $this->juris);
+        $consulta = $this->db->get('46ind_reporte');
+        foreach ($consulta->result() as $res)
+            $this->numerador = $res->logro;
+
+        // 2. Obtener la poblacion Denominador
+        $this->db->where('jurisdiccion', $this->juris);
+        $this->db->where('anio', $this->anio);
+        $consulta = $this->db->get('46ind_poblacion_ssz');
+
+        foreach ($consulta->result() as $res)
+            $this->denominador = $res->total;
+
+        // 3. Casos Nuevos / Poblacion * 100000
+        // 4. Guardar en $this->total
+        $this->total = $this->numerador / $this->denominador * 100000;
+    }
+    function reporteEstatal()
+    {
+        $this->mesNumTxt();
+        $numerador=0;
+        $denominador=0;
+
+        //  IDs de las Juris
+        $idJur = array('01','02','03','04','05','06','07');
+
+        //  Bucle para capturar cada uno de los logros
+        foreach ($idJur as $id) {
+            $this->juris = $id;
+            $this->reporte();
+            $this->logroEstatal[$id] = $this->total;
+
+            // guarda sumatoria de numerador y denominador
+            $numerador += $this->numerador;
+            $denominador += $this->denominador;
+        }
+
+        //  calcula logro estatal
+        if ($denominador != 0)
+            $this->logroEstatal['estatal'] = $numerador / $denominador * 100000;
         else
             $this->logroEstatal['estatal'] = 0;
     }
